@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>شرح صوتي — Acid Related Diseases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#eef4f4; --surface:#ffffff; --surface2:#e3eeee; --ink:#10282c; --muted:#4c666b;
+  --teal:#0b6e78; --teal-deep:#083f46; --amber:#e8930c; --amber-soft:#fdf0da;
+  --line:#cfdfdf; --stage:#0a2e34; --stage2:#0e4048; --chip:#e8f2f2;
+  --shadow:0 10px 30px rgba(8,63,70,.14);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0a1517; --surface:#122528; --surface2:#183236; --ink:#e8f2f2; --muted:#a7c2c5;
+    --teal:#2fb3bf; --teal-deep:#7fd6de; --amber:#f5a623; --amber-soft:#3a2c10;
+    --line:#24444a; --chip:#1a3438; --shadow:0 10px 30px rgba(0,0,0,.4); color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.75}
+h1,h2,h3{font-family:"Cairo","IBM Plex Sans Arabic",sans-serif;line-height:1.35;margin:0}
+.en{direction:ltr;unicode-bidi:isolate;font-weight:600}
+.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 60px}
+/* header */
+.hero{padding:26px 4px 8px}
+.hero .kicker{color:var(--teal);font-weight:700;font-size:.95rem}
+.hero h1{font-size:clamp(1.7rem,5vw,2.6rem);font-weight:800}
+.hero h1 .en{color:var(--teal-deep)}
+.hero p{color:var(--muted);max-width:60ch;margin:10px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:.9rem;font-weight:600}
+.stat b{color:var(--teal)}
+/* lesson picker */
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px;margin:22px 0 18px}
+.lesson{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;text-align:right;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,transform .2s}
+.lesson:hover{border-color:var(--teal)}
+.lesson.active{border-color:var(--teal);background:var(--chip);box-shadow:var(--shadow)}
+.lesson .num{font-size:.78rem;color:var(--amber);font-weight:700}
+.lesson .lt{font-weight:700;font-size:.98rem;line-height:1.45}
+.lesson .le{font-size:.78rem;color:var(--muted);direction:ltr;text-align:right}
+/* player */
+.player{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.stage{position:relative;background:linear-gradient(160deg,var(--stage),var(--stage2));aspect-ratio:16/9.4;overflow:hidden}
+.stage .visual{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.stage img.photo{width:100%;height:100%;object-fit:contain;background:#fdfdf8;padding:10px}
+.stage.playing img.photo{animation:kenburns 14s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1) translate(0,0)}to{transform:scale(1.09) translate(-1.2%,1.5%)}}
+.stage .shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.14) 48%,transparent 62%);transform:translateX(70%);opacity:0}
+.stage.playing .shine{opacity:1;animation:sweep 5.5s ease-in-out infinite}
+@keyframes sweep{0%{transform:translateX(70%)}55%,100%{transform:translateX(-70%)}}
+.stage .fadein{animation:fadein .6s ease both}
+@keyframes fadein{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+/* diagram panels */
+.diagram{width:100%;height:100%;padding:54px 20px 74px;display:flex;flex-direction:column;justify-content:center;gap:12px;color:#eaf6f6}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.dchip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:12px 14px;font-size:.95rem;animation:pop .5s ease both}
+.dchip b{color:#ffd98a}
+.dchip:nth-child(2){animation-delay:.15s}.dchip:nth-child(3){animation-delay:.3s}.dchip:nth-child(4){animation-delay:.45s}.dchip:nth-child(5){animation-delay:.6s}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.dcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.dcard{background:rgba(255,255,255,.07);border:1.5px solid rgba(127,214,222,.5);border-radius:14px;padding:14px;text-align:center;animation:pop .5s ease both}
+.dcard .big{font-size:1.25rem;font-weight:800;color:#8fe3ea}
+.dcard small{color:#cfe8ea}
+.bar-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px}
+.bar-track{grid-column:1/-1;height:16px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#2fb3bf,#f5a623);border-radius:99px;transition:width 1.2s ease}
+.bar-row .bl{font-weight:600}.bar-row .bv{color:#ffd98a;font-weight:800;direction:ltr}
+table.gu{border-collapse:collapse;width:100%;font-size:.86rem;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden}
+table.gu th,table.gu td{border:1px solid rgba(255,255,255,.18);padding:7px 9px;text-align:right;vertical-align:top}
+table.gu th{background:rgba(47,179,191,.25);color:#dff7f9}
+.layers-svg{width:100%;max-height:100%}
+.drop{animation:dropfall 2.2s ease-in infinite}
+.drop.d2{animation-delay:.7s}.drop.d3{animation-delay:1.3s}
+@keyframes dropfall{0%{transform:translateY(-14px);opacity:0}25%{opacity:1}80%{opacity:1}100%{transform:translateY(52px);opacity:0}}
+/* stage overlay */
+.stage-top{position:absolute;top:0;right:0;left:0;display:flex;justify-content:space-between;align-items:flex-start;padding:12px 14px;pointer-events:none;z-index:3}
+.badge{background:rgba(4,30,34,.78);color:#ffe1a1;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:700}
+.badge.src{color:#bfe6ea;font-weight:500}
+.eq{display:none;align-items:flex-end;gap:3px;height:22px;background:rgba(4,30,34,.78);padding:5px 9px;border-radius:999px}
+.stage.playing .eq{display:flex}
+.eq i{width:4px;background:#2fb3bf;border-radius:2px;animation:eq 0.9s ease-in-out infinite}
+.eq i:nth-child(1){height:9px}.eq i:nth-child(2){height:16px;animation-delay:.15s}.eq i:nth-child(3){height:7px;animation-delay:.3s}.eq i:nth-child(4){height:13px;animation-delay:.45s}.eq i:nth-child(5){height:10px;animation-delay:.6s}
+@keyframes eq{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1.15)}}
+.stage-title{position:absolute;bottom:0;right:0;left:0;padding:34px 16px 12px;background:linear-gradient(transparent,rgba(4,26,30,.88));color:#fff;z-index:2}
+.stage-title h2{font-size:clamp(1.05rem,3.4vw,1.5rem)}
+/* scene overlay caption on the image while narration plays (added for static site; existing title/captions unchanged) */
+.scene-overlay{margin:6px 0 0;font-size:.92rem;line-height:1.55;color:#d7ecee;opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease,max-height .5s ease;max-height:0;overflow:hidden}
+.stage.playing .scene-overlay{opacity:1;transform:none;max-height:150px}
+.segments{display:flex;gap:5px;padding:12px 16px 0}
+.segments i{flex:1;height:5px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
+.segments i.done{background:var(--teal)}
+.segments i.now{background:var(--line)}
+.segments i.now::after{content:"";position:absolute;inset:0;background:var(--amber);transform-origin:right;animation:segfill linear forwards}
+@keyframes segfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.controls{display:flex;align-items:center;gap:10px;padding:14px 16px 6px;flex-wrap:wrap}
+.playbtn{width:58px;height:58px;border-radius:50%;border:none;background:var(--teal);color:#fff;font-size:1.35rem;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 18px rgba(11,110,120,.35);flex:none}
+.stage-pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,110,120,.35)}50%{box-shadow:0 0 0 12px rgba(11,110,120,0)}}
+.cbtn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer}
+.cbtn:hover{border-color:var(--teal);color:var(--teal)}
+.timebox{margin-inline-start:auto;color:var(--muted);font-size:.9rem;direction:ltr}
+.caption{padding:8px 18px 4px;font-size:1.06rem}
+.caption .who{color:var(--teal);font-weight:700;font-size:.85rem}
+.points{list-style:none;margin:8px 0 0;padding:0 18px 16px;display:grid;gap:7px}
+.points li{background:var(--chip);border-radius:10px;padding:8px 13px;font-size:.95rem;opacity:0;transform:translateY(8px)}
+.points li.show{opacity:1;transform:none;transition:all .45s ease}
+/* scene list */
+.scenelist{padding:4px 16px 18px;display:grid;gap:8px}
+.scenelist h3{font-size:1rem;color:var(--teal-deep)}
+.srow{display:flex;gap:10px;align-items:center;width:100%;text-align:right;background:var(--surface2);border:1.5px solid transparent;border-radius:12px;padding:9px 12px;font:inherit;color:inherit;cursor:pointer}
+.srow.current{border-color:var(--amber);background:var(--amber-soft)}
+.srow .n{width:28px;height:28px;flex:none;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:.85rem;font-weight:700}
+.srow .st{font-weight:600;font-size:.94rem}
+.srow .sd{margin-inline-start:auto;color:var(--muted);font-size:.82rem;direction:ltr;flex:none}
+/* sections */
+section.block{margin-top:34px}
+section.block>h2{font-size:1.35rem}
+section.block>p{color:var(--muted);margin:6px 0 14px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.gcard img{width:100%;height:170px;object-fit:cover;display:block;background:#fdfdf8;transition:transform .5s ease}
+.gcard:hover img{transform:scale(1.05)}
+.gcard figcaption{padding:9px 12px;font-size:.88rem;font-weight:600}
+.gcard figcaption small{display:block;color:var(--muted);font-weight:400}
+table.main{width:100%;border-collapse:collapse;background:var(--surface);border-radius:14px;overflow:hidden;font-size:.92rem;box-shadow:var(--shadow)}
+table.main th,table.main td{border:1px solid var(--line);padding:9px 11px;text-align:right;vertical-align:top}
+table.main thead th{background:var(--teal);color:#fff}
+table.main td:first-child{font-weight:700;color:var(--teal-deep);white-space:nowrap}
+.tablewrap{overflow-x:auto;border-radius:14px}
+footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:560px){ .stage{aspect-ratio:4/3.4} .timebox{margin-inline-start:0}
+  .stage-top{flex-wrap:wrap;gap:6px}
+  .badge{font-size:.68rem;padding:2px 9px;max-width:62%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .badge.src{max-width:52%}
+  .diagram{padding:62px 10px 66px;gap:7px}
+  .dgrid{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:7px}
+  .dchip{padding:7px 9px;font-size:.8rem}
+  .dcards{gap:7px}.dcard{padding:8px 6px}.dcard .big{font-size:1.02rem}.dcard small{font-size:.72rem}
+  table.gu{font-size:.72rem} table.gu th,table.gu td{padding:4px 5px}
+  .bar-track{height:12px} }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">شرح صوتي بالعربي — والمصطلحات الطبية بالإنجليزي زي ما هي في السلايدز</div>
+    <h1>أمراض الحمض <span class="en">Acid Related Diseases</span></h1>
+    <p>نفس محاضرة البوربوينت (65 شريحة) بس بصوت بيشرح عليك بالعربي، وصور ورسومات البوربوينت بتتحرك وتتظلّل وهو بيشرح عليها. اختار درس ودوس تشغيل — الصور والكلام ماشيين مع بعض مشهد بمشهد.</p>
+    <div class="stats">
+      <span class="stat"><b>6</b> دروس</span>
+      <span class="stat"><b>65</b> شريحة متغطية</span>
+      <span class="stat"><b>32</b> مشهد صوتي</span>
+      <span class="stat">الصور من <b>البوربوينت نفسه</b></span>
+    </div>
+  </header>
+
+  <nav class="lessons" id="lessons" aria-label="الدروس"></nav>
+
+  <div class="player" id="player">
+    <div class="stage" id="stage">
+      <div class="visual" id="visual"></div>
+      <div class="shine"></div>
+      <div class="stage-top">
+        <span class="badge" id="stageBadge"></span>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="badge src" id="stageSrc"></span>
+      </div>
+      <div class="stage-title"><h2 id="stageTitle"></h2><p class="scene-overlay" id="sceneOverlay"></p></div>
+    </div>
+    <div class="segments" id="segments"></div>
+    <div class="controls">
+      <button class="playbtn stage-pulse" id="playBtn" aria-label="تشغيل أو إيقاف">▶</button>
+      <button class="cbtn" id="prevBtn">⏮ السابق</button>
+      <button class="cbtn" id="nextBtn">التالي ⏭</button>
+      <button class="cbtn" id="speedBtn">السرعة 1×</button>
+      <span class="timebox" id="timeBox">0:00 / 0:00</span>
+    </div>
+    <p class="caption"><span class="who">الشرح دلوقتي:</span> <span id="captionText"></span></p>
+    <ul class="points" id="points"></ul>
+    <div class="scenelist"><h3>مشاهد الدرس — دوس على أي مشهد يبدأ منه</h3><div id="sceneRows"></div></div>
+  </div>
+
+  <section class="block">
+    <h2>صور البوربوينت الأصلية</h2>
+    <p>كل صورة هنا طالعة من ملف البوربوينت نفسه، ومرتبطة بالشريحة اللي جت منها — وهي نفس الصور اللي الشرح بيتحرك عليها فوق.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section class="block">
+    <h2>جدول المقارنة: <span class="en">Gastric Ulcer</span> ضد <span class="en">Duodenal Ulcer</span></h2>
+    <p>ملخص شرائح المقارنة (63–64) — أكتر جدول بييجي في الامتحانات.</p>
+    <div class="tablewrap"><table class="main">
+      <thead><tr><th>وجه المقارنة</th><th>Gastric Ulcer (GU)</th><th>Duodenal Ulcer (DU)</th></tr></thead>
+      <tbody>
+        <tr><td>Pathogenesis</td><td>تغيّر تركيبة مخاط المعدة + نقص تروية المخاطية</td><td>زيادة إفراز HCl</td></tr>
+        <tr><td>Incidence</td><td>غالبًا ≥ 50 سنة — ذكر = أنثى — 15% من القرح</td><td>30–60 سنة — ذكر أكثر من أنثى — 80% من القرح</td></tr>
+        <tr><td>HCl secretion</td><td>طبيعي إلى منخفض (Normal–Hypo)</td><td>مرتفع (Hyper)</td></tr>
+        <tr><td>الألم Pain</td><td>بعد الأكل بـ 15–30 دقيقة — بيزيد بالأكل</td><td>بعد الأكل بـ 2–3 ساعات وبالليل — بيخف بالأكل</td></tr>
+        <tr><td>القيء Vomiting</td><td>شائع</td><td>أقل</td></tr>
+        <tr><td>النزيف Hemorrhage</td><td>Hematemesis — قيء دموي</td><td>Melena — براز أسود</td></tr>
+        <tr><td>الثقب Perforation</td><td>ممكن</td><td>ممكن</td></tr>
+        <tr><td>Malignancy</td><td>أحيانًا (Occasional)</td><td>نادر (Rare)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer>المحتوى من بوربوينت «Acid related diseases — basic module» (65 شريحة) — الشرح بالعربي والمصطلحات بالإنجليزي كما وردت في الشرائح. الصور من ملفات البوربوينت الأصلية وبعضها لقطات شرائح كما هي في المصدر.</footer>
+</div>
+<audio id="audio" preload="metadata"></audio>
+<script>
+var LESSONS = [{"en": "Overview & Hyperacidity", "id": 1, "scenes": [{"img": "image1.jpg", "imgLabel": "من الشريحة 1 — Acid Related Disorders", "points": ["Acid Related Diseases من أكتر مشاكل الجهاز الهضمي انتشارًا", "النهاردة هنفهم: إيه هي زيادة الحمض؟ وأسبابها وأعراضها وتصنيفها"], "say": "أهلاً بيك في شرح أمراض الحمض، أو الـ Acid Related Diseases. دي من أكتر مشاكل الجهاز الهضمي انتشارًا، وبتأثر على حياة المريض اليومية بالألم والحرقان واضطراب الأكل. في الدرس الأول هنعرف يعني إيه Hyperacidity أو زيادة حمض المعدة، وهنعرف أسبابها وأعراضها، وهنصنف أمراض الحمض حسب العضو اللي بتأثر عليه.", "t": "أهلاً بيك — هنبدأ من الأول"}, {"img": "image2.jpg", "imgLabel": "من الشريحة 4 — المعدة والحرقان", "points": ["المعدة بتفرز حمض زيادة عن احتياج الهضم", "الحمض الزيادة بيهيّج ويجرح بطانة القناة الهضمية"], "say": "الـ Hyperacidity معناها إن المعدة بتفرز حمض أكتر من اللازم. المعدة في الطبيعي بتنتج الحمض عشان تساعد في هضم الأكل وتنشيط إنزيمات الهضم وقتل الميكروبات اللي بتنزل مع الأكل. لكن لما الحمض يزيد عن احتياج الهضم، الزيادة دي بتبدأ تهيّج وتجرح بطانة القناة الهضمية، رغم إن البطانة محمية أصلاً بالمخاط والبيكربونات.", "t": "يعني إيه Hyperacidity؟"}, {"diagram": "chips", "points": ["Medications — أدوية معينة", "Stressed lifestyle — ضغط وتوتر", "Spicy foods — أكل حار ومتبل", "Hypersecretory conditions — حالات مرضية بتزود الإفراز"], "say": "أسباب الـ Hyperacidity أربعة رئيسية زي ما في الشريحة: أدوية معينة، ونمط حياة مليان ضغط وتوتر، والأكل الحار والمتبل، وحالات مرضية بتخلي المعدة تفرز حمض بكميات كبيرة جدًا ودي بنسميها Hypersecretory conditions. خلي بالك إن الأسباب دي ممكن تجتمع عند نفس المريض.", "t": "أسباب زيادة الحمض"}, {"diagram": "chips", "points": ["Sudden stomach pain — ألم مفاجئ في المعدة", "Vomiting — قيء", "Loss of appetite — فقدان شهية", "Heartburn — حرقان", "Chronic indigestion & Gastric ulcers — مضاعفات لو اتسابت"], "say": "أعراض زيادة الحمض: ألم مفاجئ في المعدة، وقيء، وفقدان للشهية، وحرقان أو الـ Heartburn. ولو المشكلة اتسابت من غير علاج ممكن تسوء وتعمل مضاعفات زي عسر الهضم المزمن Chronic indigestion، وقرح المعدة Gastric ulcers. عشان كده فهم التصنيف اللي جاي مهم.", "t": "الأعراض Symptoms"}, {"diagram": "classify", "points": ["الأمراض دي بتأثر على الـ Esophagus والمعدة والـ Duodenum", "GERD — Esophagitis — Gastritis — Peptic Ulcer Disease"], "say": "أمراض الحمض بتأثر على تلات أماكن: المريء أو الـ Esophagus، والمعدة، والاثنى عشر أو الـ Duodenum. وبتتقسم لأربع أمراض: ارتجاع المريء Gastroesophageal Reflux Disease أو الـ GERD، والتهاب المريء Esophagitis، والتهاب المعدة Gastritis، ومرض القرحة الهضمية Peptic Ulcer Disease. الأربعة دول هما دروسنا الجاية بالترتيب.", "t": "التصنيف Classification"}], "slides": "1–7", "sub": "يعني إيه Hyperacidity؟ وبتتقسم لإيه؟", "title": "نظرة عامة وزيادة الحمض"}, {"en": "GERD — Part 1", "id": 2, "scenes": [{"img": "image3.jpg", "imgLabel": "من الشريحة 9 — Gastroesophageal Reflux", "points": ["Chronic disorder — مرض مزمن", "رجوع الحمض والـ Pepsin من المعدة للمريء", "السبب الجذري: خلل في حاجز الـ EGJ — Esophagogastric Junction"], "say": "الـ GERD أو Gastroesophageal Reflux Disease هو اضطراب مزمن في الجهاز الهضمي، بيحصل فيه ارتجاع أو Regurgitation لمحتويات المعدة، يعني الحمض وإنزيم الـ Pepsin، لفوق داخل المريء. السبب الجذري هو اضطراب حاجز الـ Esophagogastric Junction، وهو الصمام اللي بين المريء والمعدة، سواء بآليات داخلية أو تركيبية. بص على الرسم: الصمام اللي تحت اسمه Lower Esophageal Sphincter، ولما بيفتح في وقت غلط الحمض بيطلع لفوق.", "t": "تعريف الـ GERD"}, {"diagram": "chips", "points": ["Heartburn — حرقان خلف عظمة الصدر", "Regurgitation — ارتجاع الأكل أو سائل حامض للفم"], "say": "الأعراض النموذجية للـ GERD عرضين أساسيين: الحرقان أو الـ Heartburn، وهو إحساس حارق خلف عظمة الصدر، والارتجاع أو الـ Regurgitation، وهو رجوع الأكل المهضوم جزئيًا أو سائل حامض لحد الفم من غير مجهود. العرضين دول هما عنوان المرض ولو موجودين بانتظام نفكر في الـ GERD على طول.", "t": "الأعراض النموذجية Typical"}, {"diagram": "chips", "points": ["Chest pain — ألم صدر", "Dental erosions — تآكل الأسنان", "Chronic cough — كحة مزمنة", "Laryngitis — التهاب الحنجرة", "Asthma — ربو"], "say": "أحيانًا الـ GERD بييجي بصورة غير نموذجية، بأعراض بره المريء بنسميها Extra-esophageal symptoms: ألم في الصدر، وتآكل في الأسنان Dental erosions لأن الحمض بيوصل للفم، وكحة مزمنة، والتهاب في الحنجرة Laryngitis، ونوبات ربو Asthma. فلما مريض يشتكي من كحة مزمنة من غير سبب واضح، لازم الـ GERD يكون في الحسبان.", "t": "أعراض بره المريء Extra-esophageal"}, {"diagram": "bars", "points": ["NERD — من غير تآكل: 60–70%", "Erosive Esophagitis — بتآكل: حوالي 30%", "Barrett Esophagus — حوالي 6–12%"], "say": "بالمنظار والتحليل النسيجي، الـ GERD بيتقسم لتلات أنماط أو Phenotypes. الأول: Non-erosive Reflux Disease أو الـ NERD، وده الأكثر انتشارًا بنسبة ستين لسبعين في المية، وفيه أعراض من غير تآكل في المريء. التاني: Erosive Esophagitis بنسبة حوالي تلاتين في المية. والتالت: Barrett Esophagus بنسبة ستة لاتناشر في المية، وده أخطرهم وهنرجعله في المضاعفات.", "t": "الأنواع التلاتة Phenotypes"}, {"diagram": "chips", "points": ["Pregnancy — الحمل", "Obesity — السمنة", "Family history — تاريخ عائلي", "Unhealthy lifestyle — نمط حياة غير صحي", "Connective tissue disorders — بتضعف عضلات المريء"], "say": "عوامل الخطر للـ GERD: الحمل Pregnancy، والسمنة Obesity، والتاريخ العائلي، ونمط الحياة غير الصحي، وكمان المرضى اللي عندهم Connective tissue disorders أو أمراض نسيج ضام بتضعف عضلات المريء. وفي الدرس الجاي هنفصّل الـ Pathophysiology: ازاي الصمام بيضعف، ودور الـ Hiatal hernia، وازاي دفاع المريء بينهار.", "t": "عوامل الخطر Risk Factors"}], "slides": "8–15", "sub": "التعريف والأعراض والأنواع وعوامل الخطر", "title": "ارتجاع المريء GERD — الجزء الأول"}, {"en": "GERD — Part 2", "id": 3, "scenes": [{"img": "image5.jpg", "imgLabel": "من الشريحة 20 — Lower Esophageal Sphincter Open", "points": ["LES: عضلة طولها 3–4 سم عند الـ EGJ", "مع الـ Crural diaphragm بيعملوا حاجز ضغط عالي", "TLESR: ارتخاء مؤقت مش مرتبط بالبلع"], "say": "نبدأ بأهم آلية: الـ Lower Esophageal Sphincter أو الـ LES. دي عضلة ملساء طولها تلاتة لأربعة سنتيمتر عند الـ Esophagogastric Junction، منقبضة على طول وبتعمل مع الـ Crural diaphragm منطقة ضغط عالي أعلى من ضغط المعدة فتمنع الارتجاع. في الطبيعي بترتخي بعد الأكل ارتخاء فسيولوجي. لكن عند مرضى الـ GERD بيحصل ارتخاءات مؤقتة متكررة مش مرتبطة بالبلع اسمها Transient LES Relaxations أو TLESRs، وهي مسؤولة عن تمانية وأربعين لتلاتة وسبعين في المية من الأعراض. وبنلاحظ في الرسم الصمام مفتوح ومحتويات المعدة طالعة للمريء.", "t": "الصمام LES والارتخاء المؤقت TLESR"}, {"diagram": "chips", "points": ["Alcohol — كحول", "Smoking — تدخين", "Caffeine — كافيين", "Pregnancy — حمل", "Nitrates & Calcium channel blockers — أدوية"], "say": "الارتخاءات المؤقتة دي بتزيد مع عوامل معروفة: الكحول، والتدخين، والكافيين، والحمل، وبعض الأدوية زي الـ Nitrates والـ Calcium channel blockers. الآلية الدقيقة لزيادة الارتخاء لسه مش معروفة بالكامل، بس العوامل دي ثابتة وبتتكرر في الشرائح، فخليها في بالك كمحفزات بتضعف الصمام مؤقتًا.", "t": "إيه اللي بيزود الـ TLESRs؟"}, {"img": "image6.jpg", "imgLabel": "من الشرائح 21 و23 — Hiatal Hernia", "points": ["جزء من المعدة بيطلع فوق الـ Diaphragm", "الفتق الكبير: LES أقصر وأضعف → ارتجاع أكتر"], "say": "الآلية التانية: الـ Hiatal Hernia. الـ Hernia عمومًا هو خروج عضو من مكانه الطبيعي، والـ Hiatal hernia بيحصل لما الجزء العلوي من المعدة يطلع لفوق خلال الحجاب الحاجز. بص على المقارنة في الصورة: الشمال معدة طبيعية وحجاب سليم، واليمين الحجاب ضعيف والمعدة طالعة فوقه. الفتق ممكن يبقى موجود من غير أعراض، لكن الفتق الكبير بيخلي الـ LES أقصر وأضعف، فتزيد نوبات الارتجاع.", "t": "الفتق الحجابي Hiatal Hernia"}, {"diagram": "layers", "points": ["الدفاع بيخترق بالتعرض الطويل للمرتجع", "Acidic: HCl + Pepsin", "Alkaline: Bile salts + Pancreatic enzymes", "Gastroparesis: تأخر الإفراغ وانتفاخ المعدة بيزود المشكلة"], "say": "الآلية التالتة: ضعف دفاع مخاطية المريء. المخاطية عندها حاجز تركيبي ووظيفي بيحميها، لكن التعرض الطويل للمرتجع بيخترق الحاجز ده. المرتجع نوعين: حمضي وهو الـ Hydrochloric acid والـ Pepsin، وقلوي وهو أملاح الصفراء Bile salts وإنزيمات البنكرياس. ولو فيه Gastroparesis يعني تأخر إفراغ المعدة، الأكل بيقعد وينفخ المعدة فالضغط يزيد والارتجاع يسوء.", "t": "انهيار دفاع المخاطية Mucosal Defense"}, {"diagram": "chips", "points": ["الطبيعي: Peristalsis بينضف المريء + لعاب بيكربونات بيعادل الحمض", "الخلل: Clearance ضعيف → أعراض أشد وضرر أكبر للمخاطية"], "say": "الآلية الرابعة: خلل حركة المريء أو Defective esophageal peristalsis. في الطبيعي، الحمض اللي يوصل للمريء بيتنضف بالحركة الدودية المتكررة وبيتعادل ببيكربونات اللعاب. عند مرضى الـ GERD التنضيف ده أو الـ Clearance بيبقى ضعيف، فالحمض يقعد مدة أطول على المخاطية، والنتيجة أعراض أشد وضرر أكبر.", "t": "خلل حركة المريء Peristalsis"}, {"img": "image8.jpg", "imgLabel": "من الشريحة 29 — Esophageal Stricture", "points": ["Erosive Esophagitis: تآكلات وقرح في بطانة المريء", "Esophageal Stricture: تليّف وتضيّق → Dysphagia وانحشار الأكل"], "say": "نيجي للمضاعفات. الأولى: Erosive Esophagitis، يعني تآكلات وقرح في مخاطية المريء نتيجة الحمض المستمر. التانية اللي شايفينها في الرسم: Esophageal Stricture، التهيج المزمن في الجزء السفلي من المريء بيعمل تليّف وندوب فالمريء يضيق، والمريض يشتكي من صعوبة بلع Dysphagia وممكن الأكل ينحشر. والرسم موضح كمان توسيع التضيق بالبالون في المنظار.", "t": "المضاعفات 1 و2: التآكل والتضيق"}, {"img": "image9.jpg", "imgLabel": "من الشريحة 31 — أنواع الـ Epithelium", "points": ["تعرض مزمن للحمض بيغيّر خلايا أسفل المريء", "من Squamous إلى Metaplastic columnar epithelium", "حالة ما قبل سرطانية — أخطر مضاعفات الـ GERD"], "say": "المضاعفة التالتة والأخطر: Barrett Esophagus. التعرض المرضي المزمن للحمض بيغيّر نسيج أسفل المريء: الخلايا الحرشفية Squamous epithelium بتتحول لخلايا عمودية متحولة Metaplastic columnar epithelium، زي ما الرسم موضح الفرق بين أنواع الـ Epithelial tissue. التغيير ده حالة ما قبل سرطانية، وعشان كده الـ Barrett هو أخطر ما في الـ GERD.", "t": "المضاعفة 3: Barrett Esophagus"}], "slides": "16–31", "sub": "الفيسيولوجيا المرضية والمضاعفات", "title": "ارتجاع المريء GERD — الجزء التاني"}, {"en": "Esophagitis", "id": 4, "scenes": [{"img": "image7.jpg", "imgLabel": "من الشريحة 28 — سليم مقابل ملتهب وفيه قرحة", "points": ["Inflammation or injury لمخاطية المريء", "الأسباب: GERD — Radiation — Infection — Medication injury — Eosinophilic"], "say": "الـ Esophagitis هو التهاب أو إصابة في مخاطية المريء. بص على الصورة: الشمال مريء ومعدة سليمين، واليمين فيه Esophageal ulcer وكمان Gastric ulcer. أشهر سبب هو الـ GERD وده بنسميه Erosive esophagitis، وفي أسباب تانية: العلاج الإشعاعي Radiation، والعدوى Infections، وإصابة الأدوية، والتهاب المريء اليوزيني Eosinophilic esophagitis وهو مرض مناعي مزمن.", "t": "تعريف وأسباب الـ Esophagitis"}, {"diagram": "chips", "points": ["Chest pain — ألم في الصدر", "Odynophagia — ألم مع البلع", "Dysphagia — صعوبة في البلع"], "say": "أعراض الـ Esophagitis تلاتة عناوين: ألم في الصدر Chest pain، وألم أثناء البلع وده اسمه Odynophagia، وصعوبة في البلع Dysphagia. خلي بالك من الفرق: الـ Odynophagia ألم وانت بتبلع، والـ Dysphagia إحساس إن الأكل واقف أو بيعدي بصعوبة. العرضين مع بعض بيوجهونا للمريء نفسه مش للمعدة.", "t": "الأعراض Symptoms"}, {"diagram": "chips", "points": ["Reflux: ارتجاع متكرر بيجرح المخاطية", "Medication-induced: Doxycycline و Tetracyclines و Ferrous sulfate — تهييج مباشر", "EoE: حساسية من أكل أو مسببات في الجو Antigen sensitization", "Radiation: تدمير DNA وشوارد حرة — حاد ومزمن"], "say": "الـ Pathophysiology حسب السبب. في الـ Reflux، كمية وارتجاع متكرر من محتويات المعدة بيجرح المخاطية. في الـ Medication-induced، أدوية زي الـ Doxycycline والـ Tetracyclines والـ Ferrous sulfate بتهيّج المخاطية مباشرة وبتعطل الحماية الخلوية. في الـ Eosinophilic esophagitis السبب تحسس من أطعمة أو مسببات حساسية في الجو. وفي الـ Radiation، الإشعاع بيدمر الـ DNA وبيعمل شوارد أكسجين حرة، وتأثيره ممكن يكون حاد بتدمير فوري للخلايا أو مزمن بيظهر بعدين.", "t": "الآليات Pathophysiology"}, {"diagram": "chips", "points": ["Bleeding — نزيف", "Stricture — تضيّق", "Barrett esophagus", "Perforation — ثقب", "Laryngitis — التهاب حنجرة", "Aspiration pneumonitis — التهاب رئوي بالشفط"], "say": "مضاعفات الـ Esophagitis: نزيف Bleeding، وتضيق Stricture، وBarrett esophagus، وثقب في جدار المريء Perforation، والتهاب حنجرة Laryngitis، والتهاب رئوي نتيجة شفط المحتويات Aspiration pneumonitis. لاحظ إن المضاعفات دي بتتقاطع مع مضاعفات الـ GERD لأن الـ GERD نفسه هو أشهر أسباب التهاب المريء.", "t": "المضاعفات Complications"}], "slides": "32–36", "sub": "الأسباب والآليات والمضاعفات", "title": "التهاب المريء Esophagitis"}, {"en": "Gastritis", "id": 5, "scenes": [{"diagram": "chips", "points": ["Inflammation of the stomach lining — التهاب بطانة المعدة", "Acute: مفاجئ وشديد وممكن يتحول لمزمن", "Chronic: بطيء وألم خفيف مستمر"], "say": "الـ Gastritis هو التهاب بطانة المعدة أو الـ Stomach lining. نوعين: الـ Acute gastritis التهاب مفاجئ وشديد وممكن يتحول لمزمن لو السبب استمر، والـ Chronic gastritis بييجي ببطء وبألم خفيف مستمر. أشهر سبب في العالم كله هنتكلم عنه دلوقتي وهو جرثومة المعدة.", "t": "تعريف الـ Gastritis: حاد ومزمن"}, {"img": "image10.jpg", "imgLabel": "من الشريحة 39 — بكتيريا H. pylori", "points": ["Gram-negative rod بتستعمر مخاطية المعدة", "أشهر سبب للـ Gastritis في العالم"], "say": "الـ Helicobacter pylori أو الـ H. pylori هي بكتيريا عصوية سالبة الجرام Gram-negative rod، بتستعمر مخاطية المعدة زي ما شايفينها في الصورة بسوائطها اللي بتساعدها تتحرك وتثبت. وهي أشهر سبب للـ Gastritis على مستوى العالم، وهنفهم دلوقتي بتأذي المعدة ازاي.", "t": "جرثومة المعدة H. pylori"}, {"img": "image11.jpg", "imgLabel": "من الشريحة 42 — H. pylori infection و Gastric Ulcer", "points": ["Protease + Lipase بيكسروا طبقة المخاط والفوسفوليبيد", "النتيجة: Acid back-diffusion وموت الخلايا Apoptosis", "وبيزيد قابلية الإصابة بالسرطان على المدى الطويل"], "say": "البكتيريا بتفرز إنزيمات: الـ Protease اللي بيكسر البروتينات، والـ Lipase اللي بيكسر الدهون. الإنزيمات دي بتدهور طبقة المخاط والطبقة الفوسفوليبيدية الحامية، فالحمض يرتد ويدخل للخلايا وده الـ Acid back-diffusion، وبيحصل موت خلوي Apoptosis وزيادة قابلية للإصابة بالسرطان. الصورة موضحة الـ Epithelial damage والالتهاب وصولًا لتكوين الـ Gastric ulcer.", "t": "ازاي الـ H. pylori بتدمر الحماية؟"}, {"diagram": "bars2", "points": ["90–100% من مرضى قرحة الاثنى عشر إيجابيين", "70% من مرضى قرحة المعدة", "50% من اللي فوق 50 سنة", "80% من المصابين عمرهم ما بيجيلهم قرح"], "say": "أرقام لازم تتحفظ: تسعين لمية في المية من مرضى قرح الاثنى عشر عندهم H. pylori، وسبعين في المية من مرضى قرح المعدة، وخمسين في المية من الناس اللي فوق خمسين سنة إيجابيين. ومع ذلك تمانين في المية من المصابين عمرهم ما بيطوروا قرح. ولو الـ H. pylori سلبية باختبارات ثلاثية وزرع وسيرولوجي ومفيش علاج سابق، نفكر في أسباب تانية: التدخين والكحول والـ NSAIDs والستيرويدات، أو كائنات نادرة زي الـ Mycobacterium وHSV وCMV، أو ارتجاع الصفراء Bile reflux.", "t": "أرقام مهمة وأسباب تانية"}, {"img": "image12.jpg", "imgLabel": "من الشريحة 46 — من الخلايا الطبيعية إلى الـ Dysplasia", "points": ["Peptic ulcer — قرحة هضمية", "Chronic atrophic gastritis", "Metaplasia / Dysplasia — زي الرسم", "Gastric cancer (Adenocarcinoma)", "Iron-deficiency anemia و B12 deficiency ونزيف وثقب"], "say": "مضاعفات الـ Gastritis: قرحة هضمية Peptic ulcer، والتهاب ضموري مزمن Chronic atrophic gastritis، وبعدين تحولات خلوية Metaplasia وDysplasia زي ما الرسم موضح الفرق بين الخلايا الطبيعية وخلايا الـ Dysplasia، وصولًا لسرطان المعدة Adenocarcinoma. وكمان أنيميا نقص الحديد Iron-deficiency anemia، ونقص فيتامين B12، ونزيف، وثقب Perforation.", "t": "المضاعفات Complications"}], "slides": "37–47", "sub": "جرثومة المعدة H. pylori في المركز", "title": "التهاب المعدة Gastritis"}, {"en": "Peptic Ulcer Disease", "id": 6, "scenes": [{"img": "image13.jpg", "imgLabel": "من الشريحة 49 — Gastric ulcer و Duodenal ulcer", "points": ["انقطاع في بطانة القناة الهضمية من الحمض والـ Pepsin", "بيوصل لعمق الـ Muscularis propria", "Gastric ulcer: ألم بعد الأكل بـ 15–30 دقيقة", "Duodenal ulcer: ألم بعد الأكل بـ 2–3 ساعات وبالليل وعلى الريق"], "say": "الـ Peptic Ulcer Disease هو انقطاع في البطانة الداخلية للقناة الهضمية بسبب حمض المعدة أو الـ Pepsin، وبيعبر المخاطية وصولًا لطبقة الـ Muscularis propria. بيحصل أساسًا في المعدة وأول الاثنى عشر زي ما الصورة موضحة الـ Gastric ulcer والـ Duodenal ulcer، وممكن يمتد لأسفل المريء أو أجزاء تانية. توقيت الألم بيفرق جدًا: قرحة المعدة ألمها بعد الأكل بربع لتلت ساعة، وقرحة الاثنى عشر ألمها بعد الأكل بساعتين لتلاتة وبالليل وعلى الريق. ولازم أي مريض PUD يتعمله اختبار H. pylori.", "t": "تعريف الـ PUD وتوقيت الألم"}, {"diagram": "chips", "points": ["الأغلبية: H. pylori + NSAIDs", "H. pylori: 90% من قرح الاثنى عشر و 70–90% من قرح المعدة", "أدوية تانية: Corticosteroids و Bisphosphonates و KCl و Fluorouracil", "Smoking و Alcohol"], "say": "أسباب الـ PUD: الأغلبية الساحقة سببين، عدوى الـ H. pylori واستخدام الـ NSAIDs. الـ H. pylori مسؤولة عن تسعين في المية من قرح الاثنى عشر وسبعين لتسعين في المية من قرح المعدة بعوامل ضراوة Virulence factors. وفي أدوية تانية متورطة: الـ Corticosteroids والـ Bisphosphonates والبوتاسيوم كلوريد والـ Fluorouracil، بالإضافة للتدخين والكحول.", "t": "الأسباب Etiology"}, {"img": "image14.jpg", "imgLabel": "من الشريحة 55 — NSAIDs و COX-1 / COX-2", "points": ["بتثبط COX-1 و COX-2 → Prostaglandin يقل", "النتيجة: مخاط وبيكربونات وتدفق دم أقل", "تجدد الخلايا يقل والتصاق كرات الدم البيضاء يزيد → Gastric ulceration"], "say": "الـ NSAIDs هي تاني أشهر سبب بعد الـ H. pylori. المخطط ده من الشريحة بيلخص الآلية: الأدوية دي بتثبط إنزيمات COX-1 وCOX-2، فالـ Prostaglandin الحامي بيقل. النتيجة: تدفق الدم والمخاط والبيكربونات يقلوا، وتجدد الخلايا الطلائية يقل، والتصاق كرات الدم البيضاء يزيد، وكل الطرق دي بتؤدي في النهاية لـ Gastric ulceration زي ما السهم واصل تحت.", "t": "ازاي الـ NSAIDs بتعمل قرحة؟"}, {"img": "image15.jpg", "imgLabel": "من الشريحة 57 — Hostile factors ضد Protective factors", "points": ["Protective: Mucin و Prostaglandin و Bicarbonate و Nitric oxide و Growth factors", "Destructive: Acid و Pepsin و H. pylori و NSAIDs", "القرحة = الميزان يختل لصالح التدمير"], "say": "الـ Pathophysiology كلها ميزان. كفة الحماية فيها: الـ Mucin والـ Prostaglandin والـ Bicarbonate والـ Nitric oxide وعوامل النمو. وكفة التدمير فيها: الحمض والـ Pepsin والـ H. pylori والـ NSAIDs. الصورة موضحة الميزان: لما الكفتين متوازنين المخاطية سليمة، ولما كفة الـ Hostile factors تتقل بيحصل Peptic ulcer formation. القرحة ببساطة هي اختلال الميزان ده.", "t": "الميزان: حماية ضد تدمير"}, {"diagram": "chips", "points": ["Epigastric pain و Bloating و Fullness و Nausea", "Hematemesis — قيء دموي | Melena — براز أسود", "Red flags: فقدان وزن غير مقصود، Dysphagia متزايدة، نزيف واضح، أنيميا نقص حديد، قيء متكرر، تاريخ عائلي لسرطان الجهاز الهضمي العلوي"], "say": "العلامات الشائعة: ألم شرسوفي Epigastric pain، وانتفاخ Bloating وإحساس بالامتلاء، وغثيان وقيء، وتغير في الوزن، وقيء دموي Hematemesis، وبراز أسود Melena. لكن في علامات خطر تستدعي إحالة عاجلة: فقدان وزن غير مقصود، وصعوبة بلع متزايدة، ونزيف هضمي واضح، وأنيميا نقص حديد، وقيء متكرر، وتاريخ عائلي لسرطان الجهاز الهضمي العلوي. دي الـ Red flags، متتأخرش معاها.", "t": "الأعراض وعلامات الخطر Red Flags"}, {"diagram": "table", "points": ["شوف جدول المقارنة تحت الصوت — ده ملخص الشريحة 63 و64", "المضاعفات: نزيف علوي، انسداد مخرج المعدة، ثقب، سرطان معدة"], "say": "آخر حاجة: المقارنة بين قرحة المعدة وقرحة الاثنى عشر من جدول الشرائح. قرحة المعدة: سببها تغير تركيبة المخاط ونقص تروية المخاطية، بتيجي غالبًا فوق خمسين سنة، الذكور قد الإناث، وتمثل خمستاشر في المية من القرح، والحمض طبيعي أو قليل، والألم بعد الأكل بربع لتلت ساعة وبيزيد بالأكل، والقيء شائع، ونزيفها قيء دموي، وممكن نادرًا تتحول لخبيثة. قرحة الاثنى عشر: سببها زيادة إفراز الحمض، بتيجي من تلاتين لستين سنة والذكور أكتر، وتمثل تمانين في المية، والحمض عالي، والألم بعد الأكل بساعتين لتلاتة وبيخف بالأكل، ونزيفها براز أسود Melena، والتحول الخبيث نادر جدًا. ومضاعفات الـ PUD عمومًا: نزيف هضمي علوي، وانسداد مخرج المعدة، وثقب، وسرطان المعدة في قرح المعدة. وبكده نكون غطينا البوربوينت كله، بالتوفيق في المذاكرة.", "t": "Gastric ضد Duodenal — والمضاعفات"}], "slides": "48–65", "sub": "الأسباب والميزان المختل والفرق بين قرحة المعدة والاثنى عشر", "title": "القرحة الهضمية Peptic Ulcer Disease"}];
+var GALLERY = [
+ ["image1.jpg","شريحة 1","غلاف المحاضرة — Acid Related Disorders"],
+ ["image2.jpg","شريحة 4","المعدة والحرقان — Hyperacidity"],
+ ["image3.jpg","شريحة 9","رسم Gastroesophageal Reflux والصمام LES"],
+ ["image5.jpg","شريحة 20","الصمام مفتوح — Lower Esophageal Sphincter Open"],
+ ["image6.jpg","شرائح 21 و23","Hiatal Hernia — طبيعي مقابل فتق"],
+ ["image7.jpg","شريحة 28","مريء سليم مقابل Esophageal & Gastric ulcer"],
+ ["image8.jpg","شريحة 29","Esophageal Stricture وتوسيعه بالبالون"],
+ ["image9.jpg","شريحة 31","أنواع الـ Epithelial Tissue — أساس Barrett"],
+ ["image10.jpg","شريحة 39","بكتيريا H. pylori"],
+ ["image11.jpg","شريحة 42","H. pylori infection وآلية الـ Gastric Ulcer"],
+ ["image12.jpg","شريحة 46","من الخلايا الطبيعية إلى Dysplasia"],
+ ["image13.jpg","شريحة 49","Gastric ulcer و Duodenal ulcer في رسم واحد"],
+ ["image14.jpg","شريحة 55","مخطط NSAIDs و COX-1 / COX-2"],
+ ["image15.jpg","شريحة 57","ميزان Hostile ضد Protective factors"],
+ ["image16.jpg","شريحة 65","شريحة الختام — Thanks"]
+];
+var audio=document.getElementById('audio'), stage=document.getElementById('stage'),
+ visual=document.getElementById('visual'), playBtn=document.getElementById('playBtn'),
+ cur={lesson:0,scene:0}, speeds=[1,1.25,1.5], speedIdx=0, playing=false;
+
+function fmt(s){ if(!isFinite(s)) s=0; s=Math.round(s); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }
+function esc(t){ return t; }
+
+function diagramHTML(sc){
+  var pts=sc.points||[];
+  if(sc.diagram==='classify'){
+    var cards=[["GERD","Gastroesophageal Reflux Disease","Esophagus"],["Esophagitis","التهاب المريء","Esophagus"],["Gastritis","التهاب المعدة","Stomach"],["PUD","Peptic Ulcer Disease","Stomach & Duodenum"]];
+    return '<div class="diagram"><div class="dcards">'+cards.map(function(c,i){return '<div class="dcard" style="animation-delay:'+(i*0.18)+'s"><div class="big">'+c[0]+'</div><div>'+c[1]+'</div><small>'+c[2]+'</small></div>';}).join('')+'</div></div>';
+  }
+  if(sc.diagram==='bars'||sc.diagram==='bars2'){
+    var rows = sc.diagram==='bars'
+      ? [["NERD — من غير تآكل",65,"60–70%"],["Erosive Esophagitis",30,"~30%"],["Barrett Esophagus",9,"6–12%"]]
+      : [["Duodenal ulcer + H. pylori",95,"90–100%"],["Gastric ulcer + H. pylori",70,"70%"],["فوق 50 سنة إيجابي",50,"50%"],["مصابين من غير قرح أبدًا",80,"80%"]];
+    return '<div class="diagram">'+rows.map(function(r){return '<div class="bar-row"><span class="bl">'+r[0]+'</span><span class="bv">'+r[2]+'</span><span class="bar-track"><span class="bar-fill" data-w="'+r[1]+'"></span></span></div>';}).join('')+'</div>';
+  }
+  if(sc.diagram==='layers'){
+    return '<div class="diagram"><svg class="layers-svg" viewBox="0 0 640 300" role="img" aria-label="طبقات دفاع مخاطية المريء">'
+    +'<rect x="20" y="120" width="600" height="34" rx="8" fill="#f5a623" opacity="0.85"/><text x="330" y="142" text-anchor="middle" fill="#402c00" font-size="17" font-weight="700">Mucus layer — طبقة المخاط</text>'
+    +'<rect x="20" y="158" width="600" height="40" rx="8" fill="#2fb3bf"/><text x="330" y="184" text-anchor="middle" fill="#04333a" font-size="17" font-weight="700">Epithelial barrier — الحاجز الطلائي</text>'
+    +'<rect x="20" y="202" width="600" height="40" rx="8" fill="#0b6e78"/><text x="330" y="228" text-anchor="middle" fill="#eaf6f6" font-size="17" font-weight="700">Blood flow — التروية الدموية</text>'
+    +'<g fill="#ffd34d"><circle class="drop" cx="150" cy="60" r="11"/><circle class="drop d2" cx="320" cy="46" r="11"/><circle class="drop d3" cx="490" cy="60" r="11"/></g>'
+    +'<text x="330" y="30" text-anchor="middle" fill="#ffd98a" font-size="19" font-weight="700">HCl + Pepsin + Bile salts ↓</text>'
+    +'<text x="330" y="282" text-anchor="middle" fill="#cfe8ea" font-size="16">التعرض الطويل للمرتجع بيخترق الطبقات دي واحدة ورا التانية</text></svg></div>';
+  }
+  if(sc.diagram==='table'){
+    return '<div class="diagram"><table class="gu"><tr><th></th><th>Gastric Ulcer</th><th>Duodenal Ulcer</th></tr>'
+    +'<tr><td>العمر والانتشار</td><td>≥ 50 سنة — 15%</td><td>30–60 سنة — 80%</td></tr>'
+    +'<tr><td>الحمض HCl</td><td>طبيعي / منخفض</td><td>مرتفع</td></tr>'
+    +'<tr><td>الألم</td><td>بعد الأكل 15–30 د — يزيد بالأكل</td><td>بعد الأكل 2–3 س — يخف بالأكل</td></tr>'
+    +'<tr><td>النزيف</td><td>Hematemesis</td><td>Melena</td></tr>'
+    +'<tr><td>Malignancy</td><td>أحيانًا</td><td>نادر</td></tr></table></div>';
+  }
+  return '<div class="diagram"><div class="dgrid">'+pts.map(function(p){ var parts=p.split(' — '); return '<div class="dchip"><b>'+parts[0]+'</b>'+(parts[1]?' — '+parts.slice(1).join(' — '):'')+'</div>'; }).join('')+'</div></div>';
+}
+
+function renderLessons(){
+  document.getElementById('lessons').innerHTML = LESSONS.map(function(l,i){
+    return '<button class="lesson'+(i===cur.lesson?' active':'')+'" data-l="'+i+'"><div class="num">الدرس '+(i+1)+' • شرائح '+l.slides+'</div><div class="lt">'+l.title+'</div><div class="le">'+l.en+'</div></button>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.lesson'),function(b){
+    b.addEventListener('click',function(){ loadLesson(+b.getAttribute('data-l'),0,true); });
+  });
+}
+function renderScene(){
+  var L=LESSONS[cur.lesson], sc=L.scenes[cur.scene];
+  document.getElementById('stageBadge').textContent='الدرس '+(cur.lesson+1)+' من 6 • مشهد '+(cur.scene+1)+' من '+L.scenes.length;
+  document.getElementById('stageSrc').textContent=sc.imgLabel||('شرائح '+L.slides);
+  document.getElementById('stageTitle').textContent=sc.t;
+  document.getElementById('sceneOverlay').textContent=(function(){var s=sc.say||'';var start=0,end=s.length;while(true){var m=/[.؟!]/.exec(s.slice(start));if(!m){break;}var pos=start+m.index;var before=s.slice(0,pos);if(/(^|\s)[A-Za-z]$/.test(before)){start=pos+1;continue;}end=pos+1;break;}var t=s.slice(0,end)||s.slice(0,140);return t.length>180?t.slice(0,177)+'…':t;})();
+  visual.innerHTML = sc.img
+    ? '<img class="photo fadein" src="assets/img/'+sc.img+'" alt="'+sc.t+'">'
+    : '<div class="fadein" style="width:100%;height:100%">'+diagramHTML(sc)+'</div>';
+  var fills=visual.querySelectorAll('.bar-fill');
+  setTimeout(function(){ fills.forEach(function(f){ f.style.width=f.getAttribute('data-w')+'%'; }); },80);
+  document.getElementById('captionText').textContent=sc.say;
+  var ul=document.getElementById('points'); ul.innerHTML='';
+  (sc.points||[]).forEach(function(p,i){ var li=document.createElement('li'); li.textContent=p; ul.appendChild(li);
+    setTimeout(function(){ li.classList.add('show'); }, 350+i*450); });
+  document.getElementById('segments').innerHTML = L.scenes.map(function(s,i){
+    return '<i class="'+(i<cur.scene?'done':i===cur.scene?'now':'')+'"'+(i===cur.scene?' style="animation-duration:'+(audio.duration&&isFinite(audio.duration)?audio.duration:30)+'s"':'')+'></i>';
+  }).join('');
+  document.getElementById('sceneRows').innerHTML = L.scenes.map(function(s,i){
+    return '<button class="srow'+(i===cur.scene?' current':'')+'" data-s="'+i+'"><span class="n">'+(i+1)+'</span><span class="st">'+s.t+'</span><span class="sd" id="dur-'+i+'"></span></button>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.srow'),function(b){
+    b.addEventListener('click',function(){ loadScene(+b.getAttribute('data-s'),true); });
+  });
+  L.scenes.forEach(function(s,i){ var a=new Audio(); a.preload='metadata'; a.src='assets/audio/l'+L.id+'s'+(i+1)+'.mp3';
+    a.addEventListener('loadedmetadata',function(){ var el=document.getElementById('dur-'+i); if(el) el.textContent=fmt(a.duration); }); });
+  renderLessons();
+}
+function loadScene(idx,autoplay){
+  cur.scene=idx;
+  var L=LESSONS[cur.lesson];
+  audio.src='assets/audio/l'+L.id+'s'+(idx+1)+'.mp3';
+  audio.playbackRate=speeds[speedIdx];
+  renderScene();
+  if(autoplay){ audio.play().catch(function(){}); }
+}
+function loadLesson(idx,sceneIdx,autoplay){ cur.lesson=idx; loadScene(sceneIdx,autoplay); document.getElementById('player').scrollIntoView({behavior:'smooth',block:'start'}); }
+playBtn.addEventListener('click',function(){
+  if(audio.paused){ audio.play().catch(function(){}); } else { audio.pause(); }
+});
+document.getElementById('nextBtn').addEventListener('click',function(){
+  var L=LESSONS[cur.lesson];
+  if(cur.scene<L.scenes.length-1) loadScene(cur.scene+1,playing);
+  else if(cur.lesson<LESSONS.length-1) loadLesson(cur.lesson+1,0,playing);
+});
+document.getElementById('prevBtn').addEventListener('click',function(){
+  if(audio.currentTime>3){ audio.currentTime=0; return; }
+  if(cur.scene>0) loadScene(cur.scene-1,playing);
+  else if(cur.lesson>0){ var p=LESSONS[cur.lesson-1]; cur.lesson--; loadScene(p.scenes.length-1,playing); }
+});
+document.getElementById('speedBtn').addEventListener('click',function(){
+  speedIdx=(speedIdx+1)%speeds.length; audio.playbackRate=speeds[speedIdx];
+  this.textContent='السرعة '+speeds[speedIdx]+'×';
+});
+audio.addEventListener('play',function(){ playing=true; playBtn.textContent='⏸'; playBtn.classList.remove('stage-pulse'); stage.classList.add('playing'); });
+audio.addEventListener('pause',function(){ playing=false; playBtn.textContent='▶'; stage.classList.remove('playing'); });
+audio.addEventListener('timeupdate',function(){ document.getElementById('timeBox').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); });
+audio.addEventListener('loadedmetadata',function(){ document.getElementById('timeBox').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); renderScene(); });
+audio.addEventListener('ended',function(){
+  var L=LESSONS[cur.lesson];
+  if(cur.scene<L.scenes.length-1) loadScene(cur.scene+1,true);
+  else if(cur.lesson<LESSONS.length-1) loadLesson(cur.lesson+1,0,true);
+  else { playing=false; }
+});
+document.getElementById('gallery').innerHTML = GALLERY.map(function(g){
+  return '<figure class="gcard" style="margin:0"><img loading="lazy" src="assets/img/'+g[0]+'" alt="'+g[2]+'"><figcaption>'+g[2]+'<small>'+g[1]+' من البوربوينت</small></figcaption></figure>';
+}).join('');
+loadLesson(0,0,false);
+</script>
+</body>
+</html>

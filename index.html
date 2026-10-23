@@ -48,15 +48,15 @@ h1,h2,h3{font-family:"Cairo","IBM Plex Sans Arabic",sans-serif;line-height:1.35;
 /* player */
 .player{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
 .stage{position:relative;background:linear-gradient(160deg,var(--stage),var(--stage2));aspect-ratio:16/9.4;overflow:hidden}
-.stage .visual{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.stage .visual{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .25s ease;transform-origin:center center}
 .stage img.photo{width:100%;height:100%;object-fit:cover;background:var(--stage);padding:0}
 .stage.playing img.photo{animation:kenburns 14s ease-in-out infinite alternate}
 @keyframes kenburns{from{transform:scale(1) translate(0,0)}to{transform:scale(1.09) translate(-1.2%,1.5%)}}
 .stage .shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.14) 48%,transparent 62%);transform:translateX(70%);opacity:0}
 .stage.playing .shine{opacity:1;animation:sweep 5.5s ease-in-out infinite}
 @keyframes sweep{0%{transform:translateX(70%)}55%,100%{transform:translateX(-70%)}}
-.stage .fadein{animation:fadein .6s ease both}
-@keyframes fadein{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+.stage .fadein{animation:fadein .9s ease both}
+@keyframes fadein{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 /* diagram panels */
 .diagram{width:100%;height:100%;padding:54px 20px 74px;display:flex;flex-direction:column;justify-content:center;gap:12px;color:#eaf6f6}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
@@ -88,11 +88,19 @@ table.gu th{background:rgba(47,179,191,.25);color:#dff7f9}
 .eq i{width:4px;background:#2fb3bf;border-radius:2px;animation:eq 0.9s ease-in-out infinite}
 .eq i:nth-child(1){height:9px}.eq i:nth-child(2){height:16px;animation-delay:.15s}.eq i:nth-child(3){height:7px;animation-delay:.3s}.eq i:nth-child(4){height:13px;animation-delay:.45s}.eq i:nth-child(5){height:10px;animation-delay:.6s}
 @keyframes eq{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1.15)}}
-.stage-title{position:absolute;bottom:0;right:0;left:0;padding:34px 16px 12px;background:linear-gradient(transparent,rgba(4,26,30,.88));color:#fff;z-index:2}
+.stage-title{position:absolute;bottom:0;right:0;left:0;padding:44px 16px 12px;background:linear-gradient(transparent,rgba(4,26,30,.55) 25%,rgba(4,26,30,.94));color:#fff;z-index:2}
 .stage-title h2{font-size:clamp(1.05rem,3.4vw,1.5rem)}
 /* scene overlay caption on the image while narration plays (added for static site; existing title/captions unchanged) */
-.scene-overlay{margin:6px 0 0;font-size:.92rem;line-height:1.55;color:#d7ecee;opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease,max-height .5s ease;max-height:0;overflow:hidden}
-.stage.playing .scene-overlay{opacity:1;transform:none;max-height:150px}
+.scene-overlay{margin:8px 0 0;font-size:clamp(1.05rem,3.2vw,1.65rem);font-weight:800;line-height:1.6;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.75);opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .5s ease,max-height .5s ease;max-height:0;overflow:hidden}
+.stage.playing .scene-overlay{opacity:1;transform:none;max-height:280px}
+.scene-overlay span.w{opacity:0;display:inline-block;animation:wordin .45s ease forwards}
+@keyframes wordin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stage-tools{position:absolute;top:50%;left:10px;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:4}
+.toolbtn{border:1px solid rgba(255,255,255,.4);background:rgba(4,30,34,.78);color:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer}
+.toolbtn:hover{background:rgba(11,110,120,.9)}
+#player:fullscreen{background:var(--surface);overflow:auto}
+#player:fullscreen .stage{aspect-ratio:auto;height:70vh}
+.stage:fullscreen{aspect-ratio:auto;width:100vw;height:100vh}
 .segments{display:flex;gap:5px;padding:12px 16px 0}
 .segments i{flex:1;height:5px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
 .segments i.done{background:var(--teal)}
@@ -176,6 +184,12 @@ footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid 
         <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
         <span class="badge src" id="stageSrc"></span>
       </div>
+      <div class="stage-tools">
+        <button class="toolbtn" id="zoomOutBtn" aria-label="تصغير الصورة">－</button>
+        <button class="toolbtn" id="zoomResetBtn" aria-label="إعادة حجم الصورة">100%</button>
+        <button class="toolbtn" id="zoomInBtn" aria-label="تكبير الصورة">＋</button>
+        <button class="toolbtn" id="fullscreenBtn" aria-label="ملء الشاشة">⛶</button>
+      </div>
       <div class="stage-title"><h2 id="stageTitle"></h2><p class="scene-overlay" id="sceneOverlay"></p></div>
     </div>
     <div class="segments" id="segments"></div>
@@ -240,6 +254,8 @@ var GALLERY = [
 var audio=document.getElementById('audio'), stage=document.getElementById('stage'),
  visual=document.getElementById('visual'), playBtn=document.getElementById('playBtn'),
  cur={lesson:0,scene:0}, speeds=[1,1.25,1.5], speedIdx=0, playing=false;
+var zoom=1, lastSceneKey='';
+function applyZoom(){ visual.style.transform='scale('+zoom+')'; var rb=document.getElementById('zoomResetBtn'); if(rb) rb.textContent=Math.round(zoom*100)+'%'; }
 
 function fmt(s){ if(!isFinite(s)) s=0; s=Math.round(s); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }
 function esc(t){ return t; }
@@ -286,10 +302,11 @@ function renderLessons(){
 }
 function renderScene(){
   var L=LESSONS[cur.lesson], sc=L.scenes[cur.scene];
+  var sceneKey=cur.lesson+'-'+cur.scene; if(sceneKey!==lastSceneKey){ zoom=1; applyZoom(); lastSceneKey=sceneKey; }
   document.getElementById('stageBadge').textContent='الدرس '+(cur.lesson+1)+' من 6 • مشهد '+(cur.scene+1)+' من '+L.scenes.length;
   document.getElementById('stageSrc').textContent=sc.imgLabel||('شرائح '+L.slides);
   document.getElementById('stageTitle').textContent=sc.t;
-  document.getElementById('sceneOverlay').textContent=(function(){var s=sc.say||'';var start=0,end=s.length;while(true){var m=/[.؟!]/.exec(s.slice(start));if(!m){break;}var pos=start+m.index;var before=s.slice(0,pos);if(/(^|\s)[A-Za-z]$/.test(before)){start=pos+1;continue;}end=pos+1;break;}var t=s.slice(0,end)||s.slice(0,140);return t.length>180?t.slice(0,177)+'…':t;})();
+  document.getElementById('sceneOverlay').innerHTML=(function(){var s=sc.say||'';var start=0,end=s.length;while(true){var m=/[.؟!]/.exec(s.slice(start));if(!m){break;}var pos=start+m.index;var before=s.slice(0,pos);if(/(^|\s)[A-Za-z]$/.test(before)){start=pos+1;continue;}end=pos+1;break;}var t=s.slice(0,end)||s.slice(0,140);if(t.length>180)t=t.slice(0,177)+'…';return t.split(/\s+/).map(function(w,i){return '<span class="w" style="animation-delay:'+(i*0.18)+'s">'+w+'</span>';}).join(' ');})();
   visual.innerHTML = sc.img
     ? '<img class="photo fadein" src="assets/img/'+sc.img+'" alt="'+sc.t+'">'
     : '<div class="fadein" style="width:100%;height:100%">'+diagramHTML(sc)+'</div>';
@@ -338,6 +355,30 @@ document.getElementById('speedBtn').addEventListener('click',function(){
   speedIdx=(speedIdx+1)%speeds.length; audio.playbackRate=speeds[speedIdx];
   this.textContent='السرعة '+speeds[speedIdx]+'×';
 });
+document.getElementById('zoomInBtn').addEventListener('click',function(){ zoom=Math.min(3,zoom+0.25); applyZoom(); });
+document.getElementById('zoomOutBtn').addEventListener('click',function(){ zoom=Math.max(1,zoom-0.25); applyZoom(); });
+document.getElementById('zoomResetBtn').addEventListener('click',function(){ zoom=1; applyZoom(); });
+document.getElementById('fullscreenBtn').addEventListener('click',function(){
+  var playerEl=document.getElementById('player');
+  if(document.fullscreenElement){ document.exitFullscreen().catch(function(){}); }
+  else if(playerEl.requestFullscreen){ playerEl.requestFullscreen().catch(function(){}); }
+});
+document.addEventListener('fullscreenchange',function(){
+  var fb=document.getElementById('fullscreenBtn'); if(fb) fb.textContent=document.fullscreenElement?'✕':'⛶';
+});
+stage.addEventListener('wheel',function(e){
+  if(!e.ctrlKey) return; e.preventDefault();
+  zoom=Math.max(1,Math.min(3,zoom+(e.deltaY<0?0.25:-0.25))); applyZoom();
+},{passive:false});
+(function(){
+  var lastDist=0;
+  stage.addEventListener('touchstart',function(e){ if(e.touches.length===2){ lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY); } },{passive:true});
+  stage.addEventListener('touchmove',function(e){
+    if(e.touches.length!==2||!lastDist) return; e.preventDefault();
+    var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    zoom=Math.max(1,Math.min(3,zoom*(d/lastDist))); lastDist=d; applyZoom();
+  },{passive:false});
+})();
 audio.addEventListener('play',function(){ playing=true; playBtn.textContent='⏸'; playBtn.classList.remove('stage-pulse'); stage.classList.add('playing'); });
 audio.addEventListener('pause',function(){ playing=false; playBtn.textContent='▶'; stage.classList.remove('playing'); });
 audio.addEventListener('timeupdate',function(){ document.getElementById('timeBox').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); });

@@ -104,20 +104,19 @@ table.gu th{background:rgba(47,179,191,.25);color:#dff7f9}
 #player.fake-fullscreen{position:fixed;inset:0;z-index:9999;width:100vw;height:100dvh;overflow:auto;background:var(--surface);border-radius:0}
 #player.fake-fullscreen .stage{aspect-ratio:auto;height:70vh}
 .stage.playing .visual{animation:talkbob 1.1s ease-in-out infinite}
-/* talking face overlay on every scene + topic characters on diagram scenes */
-.talkface{position:absolute;top:48px;left:50%;transform:translateX(-50%);width:22%;max-width:175px;z-index:5;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
-.talkface svg{width:100%;height:auto;display:block}
-.char-wrap{position:absolute;top:50%;right:10px;transform:translateY(-50%);width:20%;max-width:160px;z-index:2;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
-.char-wrap svg{width:100%;height:auto;display:block}
-.visual.has-char .diagram{padding-right:26%}
+/* talking face in a side panel OUTSIDE the stage — never over the image/diagram/text */
+.stage-row{display:flex;gap:12px;align-items:stretch}
+.stage-row .stage{flex:1;min-width:0}
+.sideface{flex:none;width:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--chip);border:1px solid var(--line);border-radius:16px;padding:10px 8px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+.sideface svg{width:100%;height:auto;display:block}
 .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite}
 @keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(0.08)}}
 .mouth-open{display:none;transform-box:fill-box;transform-origin:center}
 .mouth-closed{display:block}
-.stage.playing .mouth-open{display:block;animation:mouthTalk .45s ease-in-out infinite alternate}
-.stage.playing .mouth-closed{display:none}
+#player.playing .mouth-open{display:block;animation:mouthTalk .45s ease-in-out infinite alternate}
+#player.playing .mouth-closed{display:none}
 @keyframes mouthTalk{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
-@media (max-width:560px){ .talkface{width:30%;top:44px} .char-wrap{width:26%} .visual.has-char .diagram{padding-right:32%} }
+@media (max-width:560px){ .stage-row{flex-direction:column;gap:8px} .sideface{width:100%;flex-direction:row;justify-content:flex-start;padding:6px 10px} .sideface svg{width:60px;flex:none} }
 @keyframes talkbob{0%,100%{transform:scale(1) rotate(0deg) translateY(0)}25%{transform:scale(1.03) rotate(-0.7deg) translateY(-3px)}50%{transform:scale(1.01) rotate(0.7deg) translateY(1px)}75%{transform:scale(1.04) rotate(-0.3deg) translateY(2px)}}
 .segments{display:flex;gap:5px;padding:12px 16px 0}
 .segments i{flex:1;height:5px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
@@ -194,6 +193,8 @@ footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid 
   <nav class="lessons" id="lessons" aria-label="الدروس"></nav>
 
   <div class="player" id="player">
+    <div class="stage-row">
+    <div class="sideface" id="sideface" aria-hidden="true"></div>
     <div class="stage" id="stage">
       <div class="visual" id="visual"></div>
       <div class="shine"></div>
@@ -208,8 +209,8 @@ footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid 
         <button class="toolbtn" id="zoomInBtn" aria-label="تكبير الصورة">＋</button>
         <button class="toolbtn" id="fullscreenBtn" aria-label="ملء الشاشة">⛶</button>
       </div>
-      <div class="talkface" aria-hidden="true"><svg viewBox="0 0 200 120" role="img"><rect x="8" y="6" width="184" height="108" rx="54" fill="#ffe1a1" opacity="0.97"/><g class="eye"><ellipse cx="66" cy="48" rx="16" ry="18" fill="#10282c"/><circle cx="71" cy="42" r="5" fill="#fff"/></g><g class="eye"><ellipse cx="134" cy="48" rx="16" ry="18" fill="#10282c"/><circle cx="139" cy="42" r="5" fill="#fff"/></g><g class="mouth-open"><ellipse cx="100" cy="88" rx="24" ry="15" fill="#7a1f1f"/></g><g class="mouth-closed"><path d="M72 88 Q100 101 128 88" stroke="#10282c" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg></div>
       <div class="stage-title"><h2 id="stageTitle"></h2><p class="scene-overlay" id="sceneOverlay"></p></div>
+    </div>
     </div>
     <div class="segments" id="segments"></div>
     <div class="controls">
@@ -286,6 +287,7 @@ function charSVG(kind){
   if(kind==='balance'){ return '<svg viewBox="0 0 200 170" role="img" aria-label="Balance character"><line x1="100" y1="30" x2="100" y2="150" stroke="#7a2e2e" stroke-width="5"/><line x1="30" y1="52" x2="170" y2="52" stroke="#7a2e2e" stroke-width="5" stroke-linecap="round"/><path d="M35 52 Q55 92 75 52 M125 52 Q145 92 165 52" fill="#f5a623" stroke="#7a2e2e" stroke-width="3"/><circle cx="100" cy="52" r="26" fill="#ffe1a1" stroke="#7a2e2e" stroke-width="3"/>'+eyeSVG(92,48,5,6)+eyeSVG(108,48,5,6)+mouthSVG(100,60,9,6)+'</svg>'; }
   return '<svg viewBox="0 0 200 170" role="img" aria-label="Stomach character"><path d="M55 25 C105 5 160 25 155 75 C150 120 110 155 75 145 C40 135 20 95 38 55 C44 38 48 30 55 25 Z" fill="#f6a5a5" stroke="#7a2e2e" stroke-width="3"/>'+eyeSVG(82,72,13,15)+eyeSVG(122,72,13,15)+mouthSVG(102,108,20,13)+'</svg>';
 }
+function genericFaceSVG(){ return '<svg viewBox="0 0 200 120" role="img" aria-label="Talking face"><rect x="8" y="6" width="184" height="108" rx="54" fill="#ffe1a1" opacity="0.97"/>'+eyeSVG(66,48,16,18)+eyeSVG(134,48,16,18)+mouthSVG(100,88,24,15)+'</svg>'; }
 function topicKind(L,sc){
   if(sc.diagram==='table') return 'balance';
   if(sc.diagram==='bars2') return 'bacterium';
@@ -386,10 +388,8 @@ function renderScene(){
   visual.innerHTML = sc.img
     ? '<img class="photo fadein" src="assets/img/'+sc.img+'" alt="'+sc.t+'">'
     : '<div class="fadein" style="width:100%;height:100%">'+diagramHTML(sc)+'</div>';
-  if(!sc.img){
-    visual.classList.add('has-char');
-    var cw=document.createElement('div'); cw.className='char-wrap'; cw.innerHTML=charSVG(topicKind(L,sc)); visual.appendChild(cw);
-  } else { visual.classList.remove('has-char'); }
+  var sf=document.getElementById('sideface');
+  if(sf){ sf.innerHTML = sc.img ? genericFaceSVG() : charSVG(topicKind(L,sc)); }
   var fills=visual.querySelectorAll('.bar-fill');
   setTimeout(function(){ fills.forEach(function(f){ f.style.width=f.getAttribute('data-w')+'%'; }); },80);
   document.getElementById('captionText').textContent=sc.say;
@@ -485,8 +485,8 @@ stage.addEventListener('wheel',function(e){
     zoom=Math.max(1,Math.min(3,zoom*(d/lastDist))); lastDist=d; applyZoom();
   },{passive:false});
 })();
-audio.addEventListener('play',function(){ playing=true; playBtn.textContent='⏸'; playBtn.classList.remove('stage-pulse'); stage.classList.add('playing'); });
-audio.addEventListener('pause',function(){ playing=false; playBtn.textContent='▶'; stage.classList.remove('playing'); });
+audio.addEventListener('play',function(){ playing=true; playBtn.textContent='⏸'; playBtn.classList.remove('stage-pulse'); stage.classList.add('playing'); document.getElementById('player').classList.add('playing'); });
+audio.addEventListener('pause',function(){ playing=false; playBtn.textContent='▶'; stage.classList.remove('playing'); document.getElementById('player').classList.remove('playing'); });
 audio.addEventListener('timeupdate',function(){ document.getElementById('timeBox').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); });
 audio.addEventListener('loadedmetadata',function(){ document.getElementById('timeBox').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); renderScene(); });
 audio.addEventListener('ended',function(){

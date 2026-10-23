@@ -104,6 +104,20 @@ table.gu th{background:rgba(47,179,191,.25);color:#dff7f9}
 #player.fake-fullscreen{position:fixed;inset:0;z-index:9999;width:100vw;height:100dvh;overflow:auto;background:var(--surface);border-radius:0}
 #player.fake-fullscreen .stage{aspect-ratio:auto;height:70vh}
 .stage.playing .visual{animation:talkbob 1.1s ease-in-out infinite}
+/* talking face overlay on every scene + topic characters on diagram scenes */
+.talkface{position:absolute;top:48px;left:50%;transform:translateX(-50%);width:22%;max-width:175px;z-index:5;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+.talkface svg{width:100%;height:auto;display:block}
+.char-wrap{position:absolute;top:50%;right:10px;transform:translateY(-50%);width:20%;max-width:160px;z-index:2;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+.char-wrap svg{width:100%;height:auto;display:block}
+.visual.has-char .diagram{padding-right:26%}
+.eye{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(0.08)}}
+.mouth-open{display:none;transform-box:fill-box;transform-origin:center}
+.mouth-closed{display:block}
+.stage.playing .mouth-open{display:block;animation:mouthTalk .45s ease-in-out infinite alternate}
+.stage.playing .mouth-closed{display:none}
+@keyframes mouthTalk{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@media (max-width:560px){ .talkface{width:30%;top:44px} .char-wrap{width:26%} .visual.has-char .diagram{padding-right:32%} }
 @keyframes talkbob{0%,100%{transform:scale(1) rotate(0deg) translateY(0)}25%{transform:scale(1.03) rotate(-0.7deg) translateY(-3px)}50%{transform:scale(1.01) rotate(0.7deg) translateY(1px)}75%{transform:scale(1.04) rotate(-0.3deg) translateY(2px)}}
 .segments{display:flex;gap:5px;padding:12px 16px 0}
 .segments i{flex:1;height:5px;border-radius:99px;background:var(--line);overflow:hidden;position:relative}
@@ -194,6 +208,7 @@ footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid 
         <button class="toolbtn" id="zoomInBtn" aria-label="تكبير الصورة">＋</button>
         <button class="toolbtn" id="fullscreenBtn" aria-label="ملء الشاشة">⛶</button>
       </div>
+      <div class="talkface" aria-hidden="true"><svg viewBox="0 0 200 120" role="img"><rect x="8" y="6" width="184" height="108" rx="54" fill="#ffe1a1" opacity="0.97"/><g class="eye"><ellipse cx="66" cy="48" rx="16" ry="18" fill="#10282c"/><circle cx="71" cy="42" r="5" fill="#fff"/></g><g class="eye"><ellipse cx="134" cy="48" rx="16" ry="18" fill="#10282c"/><circle cx="139" cy="42" r="5" fill="#fff"/></g><g class="mouth-open"><ellipse cx="100" cy="88" rx="24" ry="15" fill="#7a1f1f"/></g><g class="mouth-closed"><path d="M72 88 Q100 101 128 88" stroke="#10282c" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg></div>
       <div class="stage-title"><h2 id="stageTitle"></h2><p class="scene-overlay" id="sceneOverlay"></p></div>
     </div>
     <div class="segments" id="segments"></div>
@@ -202,6 +217,7 @@ footer{margin-top:40px;color:var(--muted);font-size:.88rem;border-top:1px solid 
       <button class="cbtn" id="prevBtn">⏮ السابق</button>
       <button class="cbtn" id="nextBtn">التالي ⏭</button>
       <button class="cbtn" id="speedBtn">السرعة 1×</button>
+      <button class="cbtn" id="sfxBtn">المؤثرات الصوتية: تشغيل 🔊</button>
       <span class="timebox" id="timeBox">0:00 / 0:00</span>
     </div>
     <p class="caption"><span class="who">الشرح دلوقتي:</span> <span id="captionText"></span></p>
@@ -261,6 +277,62 @@ var audio=document.getElementById('audio'), stage=document.getElementById('stage
 var zoom=1, lastSceneKey='';
 function applyZoom(){ visual.style.transform='scale('+zoom+')'; var rb=document.getElementById('zoomResetBtn'); if(rb) rb.textContent=Math.round(zoom*100)+'%'; }
 
+/* ---- talking face + topic characters (eyes blink, mouth talks only while playing) ---- */
+function eyeSVG(x,y,rx,ry){ return '<g class="eye"><ellipse cx="'+x+'" cy="'+y+'" rx="'+rx+'" ry="'+ry+'" fill="#10282c"/><circle cx="'+(x+5)+'" cy="'+(y-6)+'" r="4" fill="#fff"/></g>'; }
+function mouthSVG(x,y,rx,ry){ return '<g class="mouth-open"><ellipse cx="'+x+'" cy="'+y+'" rx="'+rx+'" ry="'+ry+'" fill="#7a1f1f"/></g><g class="mouth-closed"><path d="M'+(x-rx)+' '+y+' Q'+x+' '+(y+12)+' '+(x+rx)+' '+y+'" stroke="#10282c" stroke-width="5" fill="none" stroke-linecap="round"/></g>'; }
+function charSVG(kind){
+  if(kind==='bacterium'){ return '<svg viewBox="0 0 200 170" role="img" aria-label="H. pylori character"><path d="M35 72 Q10 55 8 32 M35 102 Q10 118 8 140 M165 72 Q190 55 192 32 M165 102 Q190 118 192 140" stroke="#4a2e7a" stroke-width="4" fill="none" stroke-linecap="round"/><rect x="28" y="55" width="144" height="62" rx="31" fill="#b39ddb" stroke="#4a2e7a" stroke-width="3"/>'+eyeSVG(82,82,13,15)+eyeSVG(118,82,13,15)+mouthSVG(100,102,20,13)+'</svg>'; }
+  if(kind==='esophagus'){ return '<svg viewBox="0 0 200 170" role="img" aria-label="Esophagus character"><rect x="72" y="8" width="56" height="140" rx="28" fill="#ffb3a7" stroke="#7a2e2e" stroke-width="3"/><ellipse cx="100" cy="140" rx="36" ry="11" fill="#e87a7a" stroke="#7a2e2e" stroke-width="3"/>'+eyeSVG(88,62,11,13)+eyeSVG(112,62,11,13)+mouthSVG(100,95,18,12)+'</svg>'; }
+  if(kind==='balance'){ return '<svg viewBox="0 0 200 170" role="img" aria-label="Balance character"><line x1="100" y1="30" x2="100" y2="150" stroke="#7a2e2e" stroke-width="5"/><line x1="30" y1="52" x2="170" y2="52" stroke="#7a2e2e" stroke-width="5" stroke-linecap="round"/><path d="M35 52 Q55 92 75 52 M125 52 Q145 92 165 52" fill="#f5a623" stroke="#7a2e2e" stroke-width="3"/><circle cx="100" cy="52" r="26" fill="#ffe1a1" stroke="#7a2e2e" stroke-width="3"/>'+eyeSVG(92,48,5,6)+eyeSVG(108,48,5,6)+mouthSVG(100,60,9,6)+'</svg>'; }
+  return '<svg viewBox="0 0 200 170" role="img" aria-label="Stomach character"><path d="M55 25 C105 5 160 25 155 75 C150 120 110 155 75 145 C40 135 20 95 38 55 C44 38 48 30 55 25 Z" fill="#f6a5a5" stroke="#7a2e2e" stroke-width="3"/>'+eyeSVG(82,72,13,15)+eyeSVG(122,72,13,15)+mouthSVG(102,108,20,13)+'</svg>';
+}
+function topicKind(L,sc){
+  if(sc.diagram==='table') return 'balance';
+  if(sc.diagram==='bars2') return 'bacterium';
+  if(sc.diagram==='layers') return 'esophagus';
+  if(L.id===2||L.id===3||L.id===4) return 'esophagus';
+  return 'stomach';
+}
+
+/* ---- per-scene contextual sounds (synthesized, except the TTS groan clip) ---- */
+var sfxOn=true, sfxCtx=null, sceneSoundKey='';
+function sfxAudioCtx(){ try{ if(!sfxCtx) sfxCtx=new (window.AudioContext||window.webkitAudioContext)(); if(sfxCtx.state==='suspended') sfxCtx.resume(); return sfxCtx; }catch(e){ return null; } }
+function sfxTone(freqTo,freqFrom,dur,vol,type){
+  var ctx=sfxAudioCtx(); if(!ctx) return;
+  try{ var t=ctx.currentTime, o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=type||'sine'; o.frequency.setValueAtTime(freqFrom,t); o.frequency.exponentialRampToValueAtTime(Math.max(30,freqTo),t+dur);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t+dur+0.05); }catch(e){}
+}
+function sfxNoise(dur,vol,filterFreq){
+  var ctx=sfxAudioCtx(); if(!ctx) return;
+  try{ var t=ctx.currentTime, len=Math.floor(ctx.sampleRate*dur), buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
+    for(var i=0;i<len;i++){ d[i]=(Math.random()*2-1)*(1-i/len); }
+    var src=ctx.createBufferSource(); src.buffer=buf; var f=ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=filterFreq; f.Q.value=1.2;
+    var g=ctx.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    src.connect(f); f.connect(g); g.connect(ctx.destination); src.start(t); }catch(e){}
+}
+function playSceneSound(kind,cb){
+  var done=false; function finish(){ if(!done){ done=true; if(cb) cb(); } }
+  if(!sfxOn||!kind){ finish(); return; }
+  try{
+    if(kind==='ah'){ var a=new Audio('assets/audio/ah.mp3'); a.volume=0.5; a.addEventListener('ended',finish); a.play().catch(finish); setTimeout(finish,1250); return; }
+    if(kind==='gurgle'){ sfxTone(150,85,0.9,0.10,'sine'); setTimeout(function(){ sfxTone(120,70,0.5,0.08,'sine'); },250); setTimeout(finish,1000); return; }
+    if(kind==='cough'){ sfxNoise(0.13,0.12,900); setTimeout(function(){ sfxNoise(0.13,0.11,800); },180); setTimeout(finish,800); return; }
+    if(kind==='pop'){ sfxTone(900,500,0.12,0.08,'triangle'); setTimeout(finish,350); return; }
+  }catch(e){}
+  finish();
+}
+function sceneSound(L,idx){
+  var map={'1-3':'ah','2-1':'ah','3-5':'ah','4-0':'ah','4-1':'ah','4-3':'ah','5-4':'ah','6-0':'ah','6-4':'ah',
+    '1-0':'gurgle','1-1':'gurgle','2-0':'gurgle','3-0':'gurgle','3-3':'gurgle','5-0':'gurgle','5-1':'gurgle','5-2':'gurgle','6-1':'gurgle','6-3':'gurgle',
+    '2-2':'cough','1-4':'pop'};
+  return map[L.id+'-'+idx]||'';
+}
+document.getElementById('sfxBtn').addEventListener('click',function(){
+  sfxOn=!sfxOn; this.textContent=sfxOn?'المؤثرات الصوتية: تشغيل 🔊':'المؤثرات الصوتية: إيقاف 🔇';
+});
+
 function fmt(s){ if(!isFinite(s)) s=0; s=Math.round(s); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }
 function esc(t){ return t; }
 
@@ -314,6 +386,10 @@ function renderScene(){
   visual.innerHTML = sc.img
     ? '<img class="photo fadein" src="assets/img/'+sc.img+'" alt="'+sc.t+'">'
     : '<div class="fadein" style="width:100%;height:100%">'+diagramHTML(sc)+'</div>';
+  if(!sc.img){
+    visual.classList.add('has-char');
+    var cw=document.createElement('div'); cw.className='char-wrap'; cw.innerHTML=charSVG(topicKind(L,sc)); visual.appendChild(cw);
+  } else { visual.classList.remove('has-char'); }
   var fills=visual.querySelectorAll('.bar-fill');
   setTimeout(function(){ fills.forEach(function(f){ f.style.width=f.getAttribute('data-w')+'%'; }); },80);
   document.getElementById('captionText').textContent=sc.say;
@@ -339,11 +415,23 @@ function loadScene(idx,autoplay){
   audio.src='assets/audio/l'+L.id+'s'+(idx+1)+'.mp3';
   audio.playbackRate=speeds[speedIdx];
   renderScene();
-  if(autoplay){ audio.play().catch(function(){}); }
+  sceneSoundKey='';
+  if(autoplay){
+    var kind=sceneSound(L,idx);
+    if(kind){ sceneSoundKey=cur.lesson+'-'+cur.scene; playSceneSound(kind,function(){ audio.play().catch(function(){}); }); }
+    else { audio.play().catch(function(){}); }
+  }
 }
 function loadLesson(idx,sceneIdx,autoplay){ cur.lesson=idx; loadScene(sceneIdx,autoplay); document.getElementById('player').scrollIntoView({behavior:'smooth',block:'start'}); }
 playBtn.addEventListener('click',function(){
-  if(audio.paused){ audio.play().catch(function(){}); } else { audio.pause(); }
+  if(audio.paused){
+    var key=cur.lesson+'-'+cur.scene;
+    if(audio.currentTime<1 && sceneSoundKey!==key){
+      var kind=sceneSound(LESSONS[cur.lesson],cur.scene);
+      if(kind){ sceneSoundKey=key; playSceneSound(kind,function(){ audio.play().catch(function(){}); }); return; }
+    }
+    audio.play().catch(function(){});
+  } else { audio.pause(); }
 });
 document.getElementById('nextBtn').addEventListener('click',function(){
   var L=LESSONS[cur.lesson];
